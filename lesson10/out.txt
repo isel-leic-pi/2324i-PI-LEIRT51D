@@ -1,0 +1,10 @@
+{
+  name: 'HAUSER - Rebel with a Cello - Meet&Greet Package',
+  type: 'event',
+  id: 'Z698xZ2qZa6y5',
+  test: false,
+  url: 'https://www.ticketmaster.es/event/hauser-rebel-with-a-cello-meetgreet-package-entradas/32331',
+  locale: 'en-us',
+  images: [
+    {
+      ratio: '16_9',
