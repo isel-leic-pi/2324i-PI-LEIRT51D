@@ -19,6 +19,7 @@ tags:
 - name: Users
 paths:
   /users:
+    description: The resource that contains all users
     post:
       tags:
       - Users
@@ -50,6 +51,7 @@ paths:
           description: Invalid input, object invalid
           content: {}
   /tasks:
+    description: Resource that contains all Tasks
     get:
       tags:
       - Tasks
@@ -57,20 +59,28 @@ paths:
       description: By passing in the appropriate options, you can search for available
         Tasks
       operationId: getTasks
-      # parameters:
-      # - name: skip
-      #   in: query
-      #   description: number of records to skip for pagination
-      #   schema:
-      #     minimum: 0
-      #     type: integer
-      # - name: limit
-      #   in: query
-      #   description: maximum number of records to return
-      #   schema:
-      #     maximum: 50
-      #     minimum: 0
-      #     type: integer
+      parameters:
+        - name: keyword
+          in: query
+          description: Query to match in task title
+          schema: 
+            type: string
+          required: false
+        - name: s
+          in: query
+          description: number of tasks to return
+          schema:
+            default: 30
+            minimum: 0
+            type: integer
+        - name: p
+          in: query
+          description: The page number
+          schema:
+            maximum: 50
+            minimum: 0
+            default: 1
+            type: integer
       responses:
         200:
           description: get all tasks, with the specified criteria and pagination 
@@ -90,13 +100,6 @@ paths:
       operationId: addTask
       security:
         - bearerAuth: []
-      parameters:
-      - name: Authorization
-        in: header
-        required: true
-        schema:
-          type: string
-          format: uuid
       requestBody:
         description: Task to add
         content:
@@ -115,6 +118,7 @@ paths:
           description: Invalid input, object invalid
           content: {}
   /tasks/{taskId}:
+    description: The resource that represents one Task
     get:
       tags:
       - Tasks
@@ -123,11 +127,6 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-      - name: Authorization
-        in: header
-        schema:
-          type: string
-          format: uuid
       - name: taskId
         in: path
         description: ID of task that to be fetched
@@ -145,8 +144,7 @@ paths:
         400:
           $ref: "#/components/responses/400BadRequest"
         404:
-          $ref: "#/components/responses/404NotFound"
-                
+          $ref: "#/components/responses/404NotFound"                
     put:
       tags:
       - Tasks
@@ -156,12 +154,6 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-      - name: Authorization
-        in: header
-        required: true
-        schema:
-          type: string
-          format: uuid
       - name: taskId
         in: path
         description: ID of the task to be deleted

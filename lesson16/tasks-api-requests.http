@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ### Get all tasks
 GET http://localhost:1904/tasks
-Authorization: Bearer {{token}}
+#Authorization: Bearer {{token}}
 
 ### Get a Task
 GET http://localhost:1904/tasks/1
@@ -21,8 +21,8 @@ POST http://localhost:1904/tasks
 Content-Type: application/json
 
 {
-    "n": "Learn HTTP",
-    "d": "Learning HTTP is very important to develop web applications"
+    "title": "Learn HTTP",
+    "drecription": "Learning HTTP is very important to develop web applications"
 }
 
 ### Delete a Task
@@ -30,4 +30,7 @@ DELETE http://localhost:1904/tasks/1
 
 ### Update a Task
 PUT http://localhost:1904/tasks/1
+
+###
+https://www.w3.org/TR/webarch/
 

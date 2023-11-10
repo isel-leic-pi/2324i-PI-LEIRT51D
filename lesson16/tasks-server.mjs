@@ -1,10 +1,14 @@
 
+import swaggerUi from 'swagger-ui-express'
+import yaml from 'yamljs'
+
 import cors from 'cors'
 import express from 'express'
 import * as tasksApi from './tasks-web-api.mjs'
 import * as usersApi from './users-web-api.mjs'
 
 const PORT = 1904
+const swaggerDocument = yaml.load('./docs/tasks-api.yaml')
 
 console.log("Setting up server")
 let app = express()
@@ -14,6 +18,7 @@ let app = express()
 // - Task:  /tasks/:id
 
 
+app.use('/slb', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use(cors())
 app.use(express.json())
 

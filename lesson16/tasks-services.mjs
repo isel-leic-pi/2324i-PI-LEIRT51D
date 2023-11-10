@@ -16,9 +16,10 @@ const TASKS = new Array(NUM_TASKS)
 let nextId = TASKS.length+1
 
 export function getAllTasks(userToken) {
-    const userId = usersServices.getUserId(userToken)
-    console.log(userId)
-    return TASKS.filter(t => t.userId == userId)   
+    // const userId = usersServices.getUserId(userToken)
+    // console.log(userId)
+    // return TASKS.filter(t => t.userId == userId)   
+    return TASKS
 }
 
 export function getTask(req, rsp) {

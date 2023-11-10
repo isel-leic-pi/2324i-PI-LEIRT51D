@@ -2,15 +2,16 @@ import * as taskServices from './tasks-services.mjs'
 
 export function getAllTasks(req, rsp) {
 
-    const s = req.query.s || 10
     // rsp.set("Content.-Type", "application/json")
     // rsp.end(JSON.stringify(TASKS, undefined, 2))
-    const token = getToken(req)
-    if(token) {
-        const tasks = taskServices.getAllTasks(token)
-        return rsp.json(tasks)
-    }
-    rsp.status(401).json("Not authorized")
+    // const token = getToken(req)
+    // if(token) {
+        // const tasks = taskServices.getAllTasks(token)
+        // return rsp.json(tasks)
+    // }
+    // rsp.status(401).json("Not authorized")
+    const tasks = taskServices.getAllTasks()
+    return rsp.json(tasks)
     
 }
 
