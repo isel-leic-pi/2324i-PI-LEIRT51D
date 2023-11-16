@@ -16,33 +16,46 @@ const TASKS = new Array(NUM_TASKS)
 let nextId = TASKS.length+1
 
 export function getAllTasks(userToken) {
-    // const userId = usersServices.getUserId(userToken)
-    // console.log(userId)
-    // return TASKS.filter(t => t.userId == userId)   
-    return TASKS
+    const userId = usersServices.getUserId(userToken)
+    console.log(userId)
+    return Promise.resolve(TASKS.filter(t => t.userId == userId))
 }
 
-export function getTask(req, rsp) {
+export function getTask(taskId, userToken) {
+    const userId = usersServices.getUserId(userToken)
     const id = req.params.id 
     const task = TASKS.find(t => t.id == id)
     if(task)
-        return rsp.json(task)
-    rsp.status(404).json("Task not found")
+        return Promise.resolve(rsp.json(task))
+    
 }
 
-export function insertTask(req, rsp) {
+export function insertTask(newTask, userToken) {
+    // Validate token ang get User
+    const userId = usersServices.getUserId(userToken)
+    
     const task = {
         id: nextId++,
-        name: req.body.n,
-        description: req.body.d
-    }
+        title: newTask.title,
+        description: newTask.description,
+        userId: userId
 
+    }
     TASKS.push(task)
-    rsp.status(201).json(task)
+    return Promise.resolve(task)
 }
 
-export function updateTask(req, rsp) {
-    rsp.end(`PUT task with id ${req.params.id}`)
+export function updateTask(taskId, newTask, userToken) {
+    // Validate token ang get User
+    const userId = usersServices.getUserId(userToken)
+    
+    const task = TASKS.find(t => t.id == taskId)
+    
+    task.title = newTask.title
+    task.description = newTask.description
+
+    TASKS.push(task)
+    return Promise.resolve(task)
 }
 
 export function deleteTask(req, rsp) {
@@ -56,10 +69,3 @@ export function deleteTask(req, rsp) {
 }
 
 
-// Auxiliary module function
-function getToken(req) {
-    const token = req.get("Authorization")
-    if(token) {
-        return token.split(" ")[1]
-    }
-}

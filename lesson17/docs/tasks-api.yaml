@@ -151,8 +151,6 @@ paths:
       summary: updates a task
       description: Updates a Task in the system
       operationId: updateTask
-      security:
-        - bearerAuth: []
       parameters:
       - name: taskId
         in: path
@@ -179,8 +177,6 @@ paths:
       summary: Delete a task by ID
       description: Delete a task by ID
       operationId: deleteTask
-      security:
-        - bearerAuth: []
       parameters:
       - name: taskId
         in: path
@@ -205,7 +201,6 @@ components:
     NewTask:
       required:
       - title
-      - userId
       type: object
       properties:
         title:
@@ -214,17 +209,18 @@ components:
         description:
           type: string
           example: To develop web applications, knowing HTTP is fundamental
-        userId:
-          type: integer
-          example: 1
     Task:
       allOf: 
         - $ref: "#/components/schemas/NewTask"
         - type: object
           required:
           - id
+          - userId
           properties:
             id:
+              type: integer
+              example: 1
+            userId:
               type: integer
               example: 1
     NewUser:
