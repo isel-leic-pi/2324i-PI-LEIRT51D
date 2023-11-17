@@ -3,13 +3,12 @@ import * as taskServices from '../../services/tasks-services.mjs'
 export const getAllTasks = processRequest(_getAllTasks)
 export const getTask = processRequest(_getTask)
 export const insertTask = processRequest(_insertTask)
-export const updateTasks = processRequest(_updateTask)
-export const deleteTasks = processRequest(_deleteTask)
-
+export const updateTask = processRequest(_updateTask)
+export const deleteTask = processRequest(_deleteTask)
 
 function processRequest(reqProcessor) {
     return function(req, rsp) {
-        const token = getToken(req)
+        const token =  getToken(req)
         if(!token) {
             rsp.status(401).json("Not authorized")  
         }
@@ -17,8 +16,6 @@ function processRequest(reqProcessor) {
         return reqProcessor(req, rsp)
     }
 }
-
-
 
 async function  _getAllTasks(req, rsp) {
     // const tasks = await taskServices.getAllTasks(req.token)

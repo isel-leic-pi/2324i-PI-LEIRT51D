@@ -1,5 +1,4 @@
 
-import * as usersServices from './users-services.mjs'
 
 const NUM_TASKS = 6
 
@@ -12,60 +11,58 @@ const TASKS = new Array(NUM_TASKS)
                         userId: (idx % 2) + 1
                      }
                 })
-
 let nextId = TASKS.length+1
 
-export function getAllTasks(userToken) {
-    const userId = usersServices.getUserId(userToken)
-    console.log(userId)
+
+// export async function getTasks(userId, q, limit, skip = 0) {
+//     const predicate = q ? t => t.title.includes(q) : t => true
+//     const retTasks = tasks
+//         .filter(t => t.userId == userId)
+//         .filter(predicate)
+//     const end = limit != Infinity ? (skip+limit) : retTasks.length
+//     return retTasks.slice(skip,  end)
+// }
+
+export async function getTasks(userId) {
     return Promise.resolve(TASKS.filter(t => t.userId == userId))
 }
 
-export function getTask(taskId, userToken) {
-    const userId = usersServices.getUserId(userToken)
-    const id = req.params.id 
-    const task = TASKS.find(t => t.id == id)
-    if(task)
-        return Promise.resolve(rsp.json(task))
-    
+export async function getTask(taskId) {
+    const taskIdx = getTaskIdx(taskId)
+    return TASKS[taskIdx]
 }
 
-export function insertTask(newTask, userToken) {
-    // Validate token ang get User
-    const userId = usersServices.getUserId(userToken)
-    
+export async function insertTask(newTask) {
     const task = {
         id: nextId++,
         title: newTask.title,
         description: newTask.description,
-        userId: userId
-
+        userId: newTask.userId
     }
     TASKS.push(task)
-    return Promise.resolve(task)
+    return task
 }
 
-export function updateTask(taskId, newTask, userToken) {
-    // Validate token ang get User
-    const userId = usersServices.getUserId(userToken)
-    
-    const task = TASKS.find(t => t.id == taskId)
-    
+export async function updateTask(newTask) {
+    const task = getTask(taskId)
     task.title = newTask.title
     task.description = newTask.description
-
-    TASKS.push(task)
-    return Promise.resolve(task)
+    return task
 }
 
-export function deleteTask(req, rsp) {
-    const id = req.params.id
-    const taskIdx = TASKS.findIndex(t => t.id == id)
+export async function deleteTask(taskId) {
+    const taskIdx = getTaskIdx(taskId)
+    const task = TASKS[taskIdx]
+    TASKS.splice(taskIdx,1)
+    return task
+}
+
+
+function getTaskIdx(taskId) {
+    const taskIdx =  TASKS.findIndex(t => t.id == taskId) 
     if(taskIdx != -1) {
-        TASKS.splice(taskIdx,1)
-        return rsp.json(`Task with id ${id} deleted`)
+        return taskIdx
     }
-    rsp.status(404).json(`Task with id ${id} not found`)
+    throw `Task with id ${taskId} not found`
 }
-
 

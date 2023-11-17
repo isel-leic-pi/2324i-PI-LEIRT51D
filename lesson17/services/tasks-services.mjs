@@ -2,55 +2,46 @@
 import * as usersServices from './users-services.mjs'
 import * as tasksData from '../data/tasks-data.mjs'
 
-export function getAllTasks(userToken) {
+export async function getAllTasks(userToken) {
     const userId = usersServices.getUserId(userToken)
-    return tasksData.getAllTasks(userId)
+    return tasksData.getTasks(userId)
 }
 
-export function getTask(taskId, userToken) {
+export async function getTask(taskId, userToken) {
     const userId = usersServices.getUserId(userToken)
-    
-    
-    return tasksData.getTask(taskId, userId)
-    
+    return _getTask(taskId, userId)
 }
 
-export function insertTask(newTask, userToken) {
-    // Validate token ang get User
+export async function insertTask(newTask, userToken) {
     const userId = usersServices.getUserId(userToken)
-    
     const task = {
-        id: nextId++,
         title: newTask.title,
         description: newTask.description,
         userId: userId
-
     }
-    TASKS.push(task)
-    return Promise.resolve(task)
+    return tasksData.insertTask(task)
 }
 
-export function updateTask(taskId, newTask, userToken) {
-    // Validate token ang get User
+export async function updateTask(taskId, newTask, userToken) {
     const userId = usersServices.getUserId(userToken)
-    
-    const task = TASKS.find(t => t.id == taskId)
-    
+    const task = _getTask(taskId, userId)
     task.title = newTask.title
     task.description = newTask.description
-
-    TASKS.push(task)
-    return Promise.resolve(task)
+    tasksData.updateTask(task)
 }
 
-export function deleteTask(req, rsp) {
-    const id = req.params.id
-    const taskIdx = TASKS.findIndex(t => t.id == id)
-    if(taskIdx != -1) {
-        TASKS.splice(taskIdx,1)
-        return rsp.json(`Task with id ${id} deleted`)
-    }
-    rsp.status(404).json(`Task with id ${id} not found`)
+export async function deleteTask(taskId, userToken) {
+    const userId = usersServices.getUserId(userToken)
+    // Get the task to check if the user userId is its owner
+    const task = _getTask(taskId, userId) 
+    tasksData.deleteTask(taskId)
 }
 
+
+async function _getTask(taskId, userId) {
+    const task = await tasksData.getTask(taskId)
+    if(task.userId == userId)
+        return task
+    throw `Task with id ${taskId} does not belong to user ${userId}`
+}
 
