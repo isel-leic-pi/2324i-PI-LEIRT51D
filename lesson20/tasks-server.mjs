@@ -4,8 +4,23 @@ import yaml from 'yamljs'
 
 import cors from 'cors'
 import express from 'express'
-import * as tasksApi from './web/api/tasks-web-api.mjs'
-import * as usersApi from './web/api/users-web-api.mjs'
+
+
+import tasksApiInit from './web/api/tasks-web-api.mjs'
+import taskServicesInit from './services/tasks-services.mjs'
+import userServicesInit from './services/users-services.mjs'
+import usersApiInit from './services/users-services.mjs'
+import tasksDataInit from './data/tasks-data.mjs'
+//import usersDataInit from './data/users-data.mjs'
+
+const tasksData = tasksDataInit()
+//const usersData = usersDataInit()
+//const usersServices = userServicesInit(usersData)
+const usersServices = userServicesInit()
+const tasksServices = taskServicesInit(usersServices, tasksData)
+const tasksApi = tasksApiInit(tasksServices)
+const usersApi = usersApiInit(usersServices)
+
 
 const PORT = 1904
 const swaggerDocument = yaml.load('./docs/tasks-api.yaml')
@@ -18,12 +33,32 @@ let app = express()
 // - Task:  /tasks/:id
 
 
-app.use('/slb', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use(cors())
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use(express.json())
 
+
+
 // Get All Tasks: GET /tasks
-app.get('/tasks', tasksApi.getAllTasks)
+
+app.use(foo)
+
+app.get('/foo', foo, fooEnd)
+
+app.get('/tasks', foo, tasksApi.getAllTasks)
+
+function foo(req, rsp, next) {
+    console.log("Foo called")
+    //rsp.end("Foo called")
+    next()
+}
+
+function fooEnd(req, rsp, next) {
+    console.log("FooEnd called")
+    //rsp.end("Foo called")
+    next()
+}
+
 
 // Get one Task: GET /tasks/:id
 app.get('/tasks/:id', tasksApi.getTask)

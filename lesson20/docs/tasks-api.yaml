@@ -113,7 +113,7 @@ paths:
           content: 
             application/json:
               schema:
-                $ref: '#/components/schemas/NewTaskCreated'
+                $ref: '#/components/schemas/TaskCreatedOrUpdated'
         400:
           description: Invalid input, object invalid
           content: {}
@@ -124,8 +124,6 @@ paths:
       - Tasks
       summary: Get a task given its id
       operationId: getTaskById
-      security:
-        - bearerAuth: []
       parameters:
       - name: taskId
         in: path
@@ -166,9 +164,12 @@ paths:
               $ref: '#/components/schemas/NewTask'
         required: false
       responses:
-        201:
-          description: task updated
-          content: {}
+        200:
+          description: Task updated
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCreatedOrUpdated'
         404:
           $ref: "#/components/responses/404NotFound"  
     delete:
@@ -231,7 +232,7 @@ components:
         userName:
           type: string
           example: antonio.silva
-    NewTaskCreated:
+    TaskCreatedOrUpdated:
       required:
       - status
       - task
@@ -245,6 +246,9 @@ components:
     MissingParameter:
       type: object
       properties:
+        code: 
+          type: integer
+          example: 1
         error:
           type: string
           example: "Missing required parameter"
