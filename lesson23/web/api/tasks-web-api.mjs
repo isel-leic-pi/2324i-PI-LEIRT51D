@@ -19,7 +19,7 @@ export default function(taskServices) {
         return async function(req, rsp) {
             const token =  getToken(req)
             if(!token) {
-                return rsp
+                rsp
                     .status(401)
                     .json({error: `Invalid authentication token`})
             }
@@ -34,9 +34,6 @@ export default function(taskServices) {
     }
 
     async function  _getAllTasks(req, rsp) {
-        const name = req.query.name
-        const s = req.query.s || 30
-        const p = req.query.p || 1
         const tasks = await taskServices.getAllTasks(req.token)
         rsp.json(tasks)
         

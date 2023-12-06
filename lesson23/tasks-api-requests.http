@@ -43,19 +43,11 @@ Authorization: Bearer {{token}}
 
 
 ###
-https://www.w3.org/TR/webarch/
 
 
-###
-GET http://localhost:1904/foo
+### Form submit to create a task
+POST http://localhost:1904/site/tasks
+Content-Type: application/x-www-form-urlencoded
 
+title=Learn HTTP&description=Learning HTTP is very important to develop web applications
 
-### Get All tasks
-GET http://localhost:9200/tasks/_search
-
-### Get Task    
-GET http://localhost:9200/tasks/_doc/eP2uNIwB92R_9RA70oTM
-
-
-### 
-PUT http://localhost:1904/foo/sadsa/kjsdhfkjdsh
