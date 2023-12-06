@@ -54,7 +54,7 @@ export default function (usersServices, tasksData) {
         const userId = await usersServices.getUserId(userToken)
         // Get the task to check if the user userId is its owner
         const task = await _getTask(taskId, userId) 
-        await tasksData.deleteTask(taskId)
+        return tasksData.deleteTask(taskId)
     }
     
     

@@ -27,7 +27,7 @@ Authorization: Bearer {{token}}
 }
 
 ### Delete a Task
-DELETE http://localhost:1904/tasks/7
+DELETE http://localhost:1904/tasks/1
 Authorization: Bearer {{token}}
 
 ### Update a Task
@@ -48,3 +48,14 @@ https://www.w3.org/TR/webarch/
 
 ###
 GET http://localhost:1904/foo
+
+
+### Get All tasks
+GET http://localhost:9200/tasks/_search
+
+### Get Task    
+GET http://localhost:9200/tasks/_doc/eP2uNIwB92R_9RA70oTM
+
+
+### 
+PUT http://localhost:1904/foo/sadsa/kjsdhfkjdsh

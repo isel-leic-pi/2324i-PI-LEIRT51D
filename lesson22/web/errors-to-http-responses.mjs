@@ -1,4 +1,4 @@
-import { ERROR_CODES } from '../../common/errors.mjs'
+import { ERROR_CODES } from '../common/errors.mjs'
 
 function HttpResponse(status, e) {
     this.status = status
@@ -13,8 +13,7 @@ export default function(e) {
         case ERROR_CODES.INVALID_ARGUMENT: return new HttpResponse(400, e)
         case ERROR_CODES.NOT_FOUND: return new HttpResponse(404, e)
         case ERROR_CODES.USER_NOT_FOUND: return new HttpResponse(401, e)
-        case ERROR_CODES.FORBIDDEN: return new HttpResponse(403, e)
-        case ERROR_CODES.MISSING_REQUIRED_ARGUMENT: return new HttpResponse(400, e)
+        case ERROR_CODES.NOT_AUTHORIZED: return new HttpResponse(401, e)
         default: return new HttpResponse(500, "Internal server error. Contact your teacher!")
     }
 }

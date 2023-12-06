@@ -4,8 +4,7 @@ export const ERROR_CODES = {
     INVALID_ARGUMENT: 1,
     NOT_FOUND: 2,
     USER_NOT_FOUND: 3,
-    FORBIDDEN: 4,
-    MISSING_REQUIRED_ARGUMENT: 5,
+    NOT_AUTHORIZED: 4,
 
 }
 
@@ -20,10 +19,7 @@ export default {
         return new Error(ERROR_CODES.USER_NOT_FOUND,`User not found`)
     },
     NOT_AUTHORIZED: (who, what) => { 
-        return new Error(ERROR_CODES.FORBIDDEN,`${who} has no access to ${what}`)
-    },
-    MISSING_REQUIRED_ARGUMENT: (argName) => { 
-        return new Error(ERROR_CODES.MISSING_REQUIRED_ARGUMENT,`Missing required argument ${argName}`)
+        return new Error(ERROR_CODES.NOT_AUTHORIZED,`${who} has no access to ${what}`)
     },
 }
 
