@@ -13,9 +13,8 @@ import tasksApiInit from './web/api/tasks-web-api.mjs'
 import taskServicesInit from './services/tasks-services.mjs'
 import userServicesInit from './services/users-services.mjs'
 import usersApiInit from './services/users-services.mjs'
-import tasksDataInit from './data/tasks-data.mjs'
-//import tasksDataInit from './data/tasks-data-db.mjs'
-//import usersDataInit from './data/users-data.mjs'
+//import tasksDataInit from './data/memory/tasks-data-mem.mjs'
+import tasksDataInit from './data/elastic/tasks-data-elastic.mjs'
 
 const tasksData = tasksDataInit()
 //const usersData = usersDataInit()
@@ -53,6 +52,11 @@ hbs.handlebars.registerHelper("slb", function(idx, options) {
     return idx%2 == 0 ? options.fn(this) : ""
 })
 
+hbs.handlebars.registerHelper("strong", function(idx,  options) {
+    return idx%2 == 0 ? `<strong>${options.fn(this)}</strong>` : options.fn(this)
+})
+
+
 
 // Get All Tasks: GET /tasks
 
@@ -60,6 +64,7 @@ hbs.handlebars.registerHelper("slb", function(idx, options) {
 app.get('/site/tasks', tasksSite.getAllTasks)
 app.get('/site/tasks/:id', tasksSite.getTask)
 app.post('/site/tasks', tasksSite.insertTask)
+app.get('/site/tasks/:id/update', tasksSite.updateTaskForm)
 app.post('/site/tasks/:id/update', tasksSite.updateTask)
 app.post('/site/tasks/:id/delete', tasksSite.deleteTask)
 
