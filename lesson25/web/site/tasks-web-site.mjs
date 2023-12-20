@@ -85,6 +85,7 @@ export default function(taskServices) {
     function getToken(req) {
         // TODO: HAMMER TIME!!!! Handle toke properly 
         return req.token = "14d72b99-48f6-48d3-94d3-5a4dcfd96c80"
+        //return req.token = "14d72b99-48f6-48d3-94d3-5a4dcfd96c81"
     }
 }
 

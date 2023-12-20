@@ -7,6 +7,7 @@ import express from 'express'
 import url from 'url'
 import path from 'path'
 import hbs from 'hbs'
+import cookieParser from 'cookie-parser'
 
 import tasksSiteInit from './web/site/tasks-web-site.mjs'
 import tasksApiInit from './web/api/tasks-web-api.mjs'
@@ -16,7 +17,9 @@ import usersApiInit from './services/users-services.mjs'
 //import tasksDataInit from './data/memory/tasks-data-mem.mjs'
 import tasksDataInit from './data/elastic/tasks-data-elastic.mjs'
 
-const tasksData = tasksDataInit()
+import session from './my-session.mjs'
+
+const tasksData = await tasksDataInit()
 //const usersData = usersDataInit()
 //const usersServices = userServicesInit(usersData)
 const usersServices = userServicesInit()
@@ -39,6 +42,10 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded())
 app.use('/site', express.static('${currentFileDir}/web/site/public'))
+
+app.use(cookieParser())
+app.use(session())
+app.use(countRequestsPerClient)
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
@@ -92,3 +99,14 @@ app.post('/users', usersApi.insertUser)
 app.listen(PORT, () => console.log(`Server listening in http://localhost:${PORT}`))
 
 console.log("End setting up server")
+
+
+
+function countRequestsPerClient(req, rsp, next) {
+    if(!req.session.count) {
+        req.session.count = 0
+    }
+    req.session.count++
+    console.log(`Current client has accessed ${req.session.count} times`)
+    next()
+}
