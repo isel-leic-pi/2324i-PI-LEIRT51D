@@ -4,17 +4,17 @@ import express from 'express'
 import morgan from 'morgan'
 import passport from 'passport'
 import expressSession from 'express-session'
-import fileStore from 'session-file-store'
+//import fileStore from 'session-file-store'
 
 const app = express()
 
-const FileStore = fileStore(expressSession)
+//const FileStore = fileStore(expressSession)
 app.use(expressSession(
   {
-    secret: "Benfica campeão 2023/2024?!",
+    secret: "Benfica campeão 2022/2023!",
     resave: false,
-    saveUninitialized: false,
-    store: new FileStore()
+    saveUninitialized: false
+    //store: new FileStore()
   }
   ))
 
@@ -25,10 +25,8 @@ app.use(express.urlencoded())
 app.use(passport.session())
 app.use(passport.initialize())
 
-passport.serializeUser((user, done) => done(null, user))
-passport.deserializeUser((user, done) => done(null, user))
-
-
+passport.serializeUser(serializeUserDeserializeUser)
+passport.deserializeUser(serializeUserDeserializeUser)
 
 
 app.use('/auth', verifyAuthenticated)
@@ -63,6 +61,9 @@ function homeAuthenticated(req, rsp) {
 </html>`)
 }
 
+function serializeUserDeserializeUser (user, done) {
+  done(null, user)
+}
 
 function serializeUser(user, done) {
   console.log("serializeUserCalled")

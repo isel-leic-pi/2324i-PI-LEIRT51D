@@ -23,7 +23,7 @@ async function fetchInternal(uri, options = { }, body = undefined) {
         options.body = JSON.stringify(body)
     }
 
-    //console.log(`Fetching from ${uri} with these options`, options)
+    console.log(`Fetching from ${uri} with these options`, options)
 
     return fetch(uri, options)
         .then(response => response.json())

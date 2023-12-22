@@ -17,7 +17,7 @@ import usersApiInit from './services/users-services.mjs'
 //import tasksDataInit from './data/memory/tasks-data-mem.mjs'
 import tasksDataInit from './data/elastic/tasks-data-elastic.mjs'
 
-import session from './my-session.mjs'
+//import session from './my-session.mjs'
 
 const tasksData = await tasksDataInit()
 //const usersData = usersDataInit()
@@ -32,7 +32,6 @@ const tasksSite = tasksSiteInit(tasksServices)
 const PORT = 1904
 
 const currentFileDir = url.fileURLToPath(new URL('.', import.meta.url));
-
 const swaggerDocument = yaml.load(`${currentFileDir}/docs/tasks-api.yaml`)
 
 console.log("Setting up server")
@@ -41,17 +40,19 @@ let app = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded())
-app.use('/site', express.static('${currentFileDir}/web/site/public'))
+
+const publicFilesDir = `${currentFileDir}/web/site/resources/public`
+app.use('/site', express.static(publicFilesDir))
 
 app.use(cookieParser())
-app.use(session())
+//app.use(session())
 app.use(countRequestsPerClient)
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // Handlebars view engine setup
 app.set('view engine', 'hbs')
-const viewsDir = path.join(currentFileDir, 'web', 'site', 'views')
+const viewsDir = path.join(currentFileDir, 'web', 'site', 'resources', 'views')
 app.set('views', viewsDir)
 hbs.registerPartials(path.join(viewsDir, 'partials'))
 
@@ -59,8 +60,8 @@ hbs.handlebars.registerHelper("slb", function(idx, options) {
     return idx%2 == 0 ? options.fn(this) : ""
 })
 
-hbs.handlebars.registerHelper("strong", function(idx,  options) {
-    return idx%2 == 0 ? `<strong>${options.fn(this)}</strong>` : options.fn(this)
+hbs.handlebars.registerHelper("important", function(idx,  options) {
+    return idx%2 == 0 ? `<div class="important">${options.fn(this)}</div>` : options.fn(this)
 })
 
 

@@ -6,7 +6,7 @@ const URI_PREFIX='http://localhost:9200/'
 export default async function(index) {
 
     // Create the index unconditionally. If the index already exists, nothing happiness
-    //await put(`${URI_PREFIX}${index}`)
+    await put(`${URI_PREFIX}${index}`)
 
     return {
         getAll: () => `${URI_PREFIX}${index}/_search`,
